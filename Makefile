@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/25 14:36:27 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/05/25 14:53:16 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,13 @@ X = "\033[0m"
 UP = "\033[A"
 CUT = "\033[K"
 
-all: octopus ${NAME}
-	@echo ${G}Success"   "[${NAME}]${X}
+all: libft ${NAME}
+
+libft: octopus
+	@make -C libft/
 
 ${NAME}: ${OBJ}
-	@echo ${Y}Compiling [${NAME}]...${X}
+	@echo ${B}Compiling [${NAME}]...${X}
 	@${CC} ${CFLAGS} ${LIB} ${INCL} -o $@ ${OBJ}
 	@echo ${G}Success"   "[${NAME}]${X}
 
@@ -78,6 +80,8 @@ test:
 build: ${OBJ}
 
 re: fclean all
+
+# BC BM BB BG BY BR
 
 octopus:
 	@echo ${BB}"                                            _       _     _          _ _"
