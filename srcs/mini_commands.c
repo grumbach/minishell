@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:21:41 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 06:59:31 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 07:27:55 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int			mini_cd(char *args, char **envp)
 	(void)envp;
 	if (!args)
 	{
-		chdir("/");
+		chdir("~");
 		return (1);
 	}
 	while (*args == SEPARATOR_CHAR)
@@ -39,17 +39,14 @@ int			mini_echo(char *args, char **envp)
 
 int			mini_env(char *args, char **envp)
 {
-	// int		i;
-	//
-	// i = 0;
-	// while (envp[i])
-	// {
-	// 	ft_printf("%s\n", *envp);
-	// 	++;
-	// }
-	ft_printf("called env\n");
 	(void)args;
-	(void)envp;
+	if (!envp)
+		return (0);
+	while (*envp)
+	{
+		ft_printf("%s\n", *envp);
+		envp++;
+	}
 	return (1);
 }
 

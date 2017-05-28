@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 06:48:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 08:21:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,16 @@ static void	set_commands(t_cmd *cmd)
 int			main(int ac, char **av, char **envp)
 {
 	t_cmd	cmd[BUILT_IN_CMD_NB];
-	char 	*line;
+	t_array	*line;
 
-	ft_bzero(&cmd, sizeof(cmd));
-	(void)av;
 	showoff();
+	(void)av;
+	(void)ac;
+	if (!(line = ft_arraynew(sizeof(char))))
+		errors(0, "malloc failed");
+	ft_bzero(&cmd, sizeof(cmd));
 	set_commands(cmd);
-	while ((ac = ft_get_next_line(0, &line)))
-	{
-		if (ac == -1 || !line)
-			errors(1, "failed to read");
-		if (!mini_parse(cmd, line, envp))
-			break ;
-		ft_memdel((void**)&line);
-		ft_printf("$> ");
-	}
+	mini_parse(line, cmd, envp);
+	ft_arraydel(&line);
 	return (EXIT_SUCCESS);
 }

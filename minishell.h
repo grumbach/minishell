@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:38:11 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 06:49:35 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 08:54:01 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ typedef struct	s_cmd
 
 # define SEPARATOR_CHAR ' '
 
-int			mini_parse(t_cmd *cmd, char *line, char **envp);
-void		mini_exec(const char *path, char *const *args, char *const *envp);
+void		mini_parse(t_array *line, t_cmd *cmd, char **envp);
+int			mini_exec(char *command, char *args, char **envp);
+// char		*locate_in_env(const char *var, const char **envp);
 
 /*
 ** errors

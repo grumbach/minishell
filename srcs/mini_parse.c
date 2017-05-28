@@ -6,36 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 06:32:26 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 09:20:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*whereis_command(char *command, char **envp)
-{
-	char	*path;
-
-	if (1)//found!
-	{
-		if (!(path = ft_strjoin(*envp, command)))
-			errors(0, "malloc failed");
-		return (path);
-	}
-	return (0);
-}
-
-static int	exec_path(char *command, char *args, char **envp)
-{
-	char	*path;
-
-	if (!(path = whereis_command(command, envp)))
-		return (0);
-	//set args
-	mini_exec(path, &args, envp);//
-	free(path);
-	return (1);
-}
 
 static int	exec_builtin(t_cmd *cmd, char *command, char *args, char **envp)
 {
@@ -48,9 +23,9 @@ static int	exec_builtin(t_cmd *cmd, char *command, char *args, char **envp)
 	while (i >= 0 && i < BUILT_IN_CMD_NB && --n)
 		if ((comp = ft_strcmp(command, cmd[i].name)))
 		{
-			ft_printf("i = %d\n", i);
+			// ft_printf("i = %d\n", i);
 			if (comp > 0)
-				i += (BUILT_IN_CMD_NB - i) / 2;
+				i += (BUILT_IN_CMD_NB - i + 1) / 2;
 			else
 				i -= (i + 1) / 2;
 		}
@@ -59,7 +34,7 @@ static int	exec_builtin(t_cmd *cmd, char *command, char *args, char **envp)
 	return (0);
 }
 
-int			mini_parse(t_cmd *cmd, char *line, char **envp)
+static int	command_center(t_cmd *cmd, char *line, char **envp)
 {
 	int		i;
 	char	*args;
@@ -78,7 +53,44 @@ int			mini_parse(t_cmd *cmd, char *line, char **envp)
 		args = &line[i + 1];
 	}
 	if (!exec_builtin(cmd, line, args, envp))
-		if (!exec_path(line, args, envp))
+		if (!mini_exec(line, args, envp))
 			shell_error(3, line);
 	return (1);
+}
+
+static int	get_actions(char buf)
+{
+	ft_printf("{%c}", buf);
+	if (buf == '\t')
+		return (1);
+	return (0);
+}
+
+void		mini_parse(t_array *line, t_cmd *cmd, char **envp)
+{
+	int		ret;
+	int		index;
+	char	buf;
+
+	index = 0;
+	while ((ret = read(0, &buf, 1)))
+		if (ret == -1)
+			errors(1, "failed to read");
+		else if (buf == '\n')
+		{
+			if (!(line = ft_arrayadd(line, (char[1]){'\0'}, index, 1)))
+				errors(0, "malloc failed");
+			if (!command_center(cmd, line->content, envp))
+				break ;
+			index = 0;
+			ft_printf("$> ");
+			continue ;
+		}
+		else if (get_actions(buf))
+			continue ;
+		else if ((!((!index && buf == SEPARATOR_CHAR) || \
+			(index && buf == SEPARATOR_CHAR && \
+			((char*)line->content)[index - 1] == SEPARATOR_CHAR))) && \
+			(!(line = ft_arrayadd(line, (char[1]){buf}, index++, 1))))
+				errors(0, "malloc failed");
 }

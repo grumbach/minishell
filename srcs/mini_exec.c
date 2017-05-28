@@ -6,13 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 07:03:31 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 09:09:49 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		mini_exec(const char *path, char *const *args, char *const *envp)
+static void	exec_cmd(const char *path, char *const *args, char *const *envp)
 {
 	pid_t	pid;
 
@@ -27,8 +27,33 @@ void		mini_exec(const char *path, char *const *args, char *const *envp)
 	else if (wait(NULL) == -1)
 		errors(0, "wait error");
 }
-// 
-// char		*locate_in_env(const char **envp)
+
+static char	*whereis_command(char *command, char **envp)
+{
+	char	*path;
+
+	if (1)//found!
+	{
+		if (!(path = ft_strjoin(*envp, command)))
+			errors(0, "malloc failed");
+		return (path);
+	}
+	return (0);
+}
+
+int			mini_exec(char *command, char *args, char **envp)
+{
+	char	*path;
+
+	if (!(path = whereis_command(command, envp)))
+		return (0);
+	//set args
+	exec_cmd(path, &args, envp);//
+	free(path);
+	return (1);
+}
+
+// char		*locate_in_env(const char *var, const char **envp)
 // {
 // 	if (!envp)
 // 		return (NULL);
