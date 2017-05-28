@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 01:08:52 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 07:03:31 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,3 +27,14 @@ void		mini_exec(const char *path, char *const *args, char *const *envp)
 	else if (wait(NULL) == -1)
 		errors(0, "wait error");
 }
+// 
+// char		*locate_in_env(const char **envp)
+// {
+// 	if (!envp)
+// 		return (NULL);
+// 	while (*envp)
+// 	{
+// 		ft_printf("%s\n", env);
+// 		(*envp)++;
+// 	}
+// }

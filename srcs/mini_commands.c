@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:21:41 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 03:14:26 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 06:59:31 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,18 @@
 int			mini_cd(char *args, char **envp)
 {
 	ft_printf("called cd\n");
-	(void)args;
 	(void)envp;
+	if (!args)
+	{
+		chdir("/");
+		return (1);
+	}
+	while (*args == SEPARATOR_CHAR)
+		args++;
+	if (*args == '-' && !*(args + 1))
+		chdir("..");//LASTDIR!!
+	if (chdir(args) == -1)
+		shell_error(2, args);
 	return (1);
 }
 
