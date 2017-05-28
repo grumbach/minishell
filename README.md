@@ -30,3 +30,11 @@ Let us therefore write a <b>UNIX</b>-like shell : <b>minishell</b>
 execve (/bin/ls, -hj -f dt ,env) -1FAIL
 access (path, W_OK | X_OK | R_OK | F_OK) // F_OK == exist
 wait()
+
+
+// echo [-n(no\n)] [string ...]
+// cd [-(goback)] [dir]
+// setenv PATH="/bin:/usr/bin:/usr/sbin:usr/ucb/bin"
+// unsetenv PATH
+// envp
+// exit
