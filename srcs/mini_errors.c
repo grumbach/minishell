@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 13:45:07 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 16:21:21 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 19:16:05 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ long		shell_error(const int erno, const char *comment)
 	if (comment)
 		ft_putstr_fd(comment, 2);
 	if (erno == 2)
-		ft_putstr_fd(" : failed to change dir\n", 2);
+		ft_putstr_fd(" : Permission denied\n", 2);
 	if (erno == 3)
 		ft_putstr_fd(" : command not found\n", 2);
 	if (erno == 4)
@@ -40,5 +40,7 @@ long		shell_error(const int erno, const char *comment)
 		"                                 Linus Torvalds\n", 2);
 	if (erno == 5)
 		ft_putstr_fd(" not set\n", 2);
+	if (erno == 6)
+		ft_putstr_fd(" : something else....\n", 2);
 	return (0);
 }

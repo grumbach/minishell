@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 18:03:16 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 19:16:51 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int				mini_exec(char *command, char *args, t_env *env)
 
 	path = NULL;
 	argv = NULL;
-	if (!(path = mini_whereis_env("PATH=", env)))
+	if (!(path = mini_whereis_env("PATH", env)))
 		return (shell_error(5, "PATH"));
 	if (args && *args && !(argv = fill_argv(args)))
 		errors(0, "malloc failed", &env);

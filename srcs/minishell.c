@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 16:35:21 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 18:18:40 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int			main(int ac, char **av, char **envp)
 		errors(0, "malloc failed", &env);
 	ft_bzero(&cmd, sizeof(cmd));
 	set_commands(cmd);
-	mini_parse(line, cmd, env);
+	mini_parse(line, cmd, &env);
 	ft_arraydel(&line);
 	mini_free_env(&env, NULL);
 	return (EXIT_SUCCESS);

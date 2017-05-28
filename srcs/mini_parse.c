@@ -6,13 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 17:14:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 18:36:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	exec_builtin(t_cmd *cmd, char *command, char *args, t_env *env)
+static int	exec_builtin(t_cmd *cmd, char *command, char *args, t_env **env)
 {
 	int		i;
 	int		n;
@@ -33,7 +33,7 @@ static int	exec_builtin(t_cmd *cmd, char *command, char *args, t_env *env)
 	return (0);
 }
 
-static int	command_center(t_cmd *cmd, char *line, t_env *env)
+static int	command_center(t_cmd *cmd, char *line, t_env **env)
 {
 	int		i;
 	char	*args;
@@ -54,7 +54,7 @@ static int	command_center(t_cmd *cmd, char *line, t_env *env)
 		args = &line[i + 1];
 	}
 	if (!exec_builtin(cmd, line, args, env))
-		if (!mini_exec(line, args, env))
+		if (!mini_exec(line, args, *env))
 			shell_error(3, line);
 	return (1);
 }
@@ -66,7 +66,7 @@ static int	get_actions(char buf)
 	return (0);
 }
 
-void		mini_parse(t_array *line, t_cmd *cmd, t_env *env)
+void		mini_parse(t_array *line, t_cmd *cmd, t_env **env)
 {
 	int		ret;
 	int		index;
@@ -75,11 +75,11 @@ void		mini_parse(t_array *line, t_cmd *cmd, t_env *env)
 	index = 0;
 	while ((ret = read(0, &buf, 1)))
 		if (ret == -1)
-			errors(1, "failed to read", &env);
+			errors(1, "failed to read", env);
 		else if (buf == '\n')
 		{
 			if (!(line = ft_arrayadd(line, (char[1]){'\0'}, index, 1)))
-				errors(0, "malloc failed", &env);
+				errors(0, "malloc failed", env);
 			if (!command_center(cmd, line->content, env))
 				break ;
 			index = 0;
@@ -92,5 +92,5 @@ void		mini_parse(t_array *line, t_cmd *cmd, t_env *env)
 			(index && buf == SEPARATOR_CHAR && \
 			((char*)line->content)[index - 1] == SEPARATOR_CHAR))) && \
 			(!(line = ft_arrayadd(line, (char[1]){buf}, index++, 1))))
-				errors(0, "malloc failed", &env);
+				errors(0, "malloc failed", env);
 }
