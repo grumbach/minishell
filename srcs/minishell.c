@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 14:12:00 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 16:35:21 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int			main(int ac, char **av, char **envp)
 		if (!(*tail = ft_memalloc(sizeof(t_env))) || \
 			(!((*tail)->content = ft_strdup(*envp))))
 			errors(0, "malloc failed", &env);
-		tail = &env->next;
+		tail = &(*tail)->next;
 		envp++;
 	}
 	if (!(line = ft_arraynew(sizeof(char))))

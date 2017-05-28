@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 16:19:26 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 17:14:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	exec_builtin(t_cmd *cmd, char *command, char *args, t_env *env)
 	while (i >= 0 && i < BUILT_IN_CMD_NB && --n)
 		if ((comp = ft_strcmp(command, cmd[i].name)))
 		{
-			// ft_printf("i = %d\n", i);
 			if (comp > 0)
 				i += (BUILT_IN_CMD_NB - i + 1) / 2;
 			else
@@ -45,6 +44,8 @@ static int	command_center(t_cmd *cmd, char *line, t_env *env)
 		shell_error(4, 0);
 	i = 0;
 	args = NULL;
+	if (!*line)
+		return (1);
 	while (line[i] && line[i] != SEPARATOR_CHAR)
 		i++;
 	if (line[i])

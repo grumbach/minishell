@@ -6,11 +6,24 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 16:23:22 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 18:03:16 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int		env_size(t_env *env)
+{
+	int			i;
+
+	i = 0;
+	while (env)
+	{
+		env = env->next;
+		i++;
+	}
+	return (i);
+}
 
 static void		exec_cmd(const char *path, char *const *args, t_env *env)
 {
@@ -21,7 +34,7 @@ static void		exec_cmd(const char *path, char *const *args, t_env *env)
 
 	tail = env;
 	i = 0;
-	if (!(envp = ft_memalloc(ft_lstsize((t_list *)env) * sizeof(char*))))
+	if (!(envp = ft_memalloc(env_size(env) * sizeof(char*))))
 		errors(0, "malloc error", &env);
 	while (tail)
 	{
@@ -41,27 +54,55 @@ static void		exec_cmd(const char *path, char *const *args, t_env *env)
 	free(envp);
 }
 
-char			*mini_whereis_env(char *envvar, t_env *env)
+static char		**fill_argv(char *args)
 {
-	while (env)
+	char		**argv;
+	int			i;
+	int			words;
+
+	argv = NULL;
+	words = 0;
+	i = -1;
+	while (args[++i])
+		if ((i && args[i - 1] == SEPARATOR_CHAR) || \
+			(!i && args[i] != SEPARATOR_CHAR))
+			words++;
+	if (!(argv = ft_memalloc(sizeof(char*) * (words + 1))))
+		return (NULL);
+	i = 0;
+	while (*args && words--)
 	{
-		if (!ft_strncmp(envvar, env->content, ft_strlen(envvar)))
-			return (env->content);
-		env = env->next;
+		argv[i++] = args;
+		while (*args && *args != SEPARATOR_CHAR)
+			args++;
+		if (*args == SEPARATOR_CHAR)
+			*args++ = '\0';
+	}
+	return (argv);
+}
+
+static char		*fill_path(char *path, const char *command, t_env *env)
+{
+	char		*correctpath;
+	int			i;
+
+	if (!(correctpath = ft_strnew(ft_strlen(path) + ft_strlen(command) + 2)))
+		errors(0, "malloc failed", &env);
+	path += ft_strlen("PATH=");
+	while (*path)
+	{
+		i = 0;
+		while (*path && *path != ':')
+			correctpath[i++] = *path++;
+		correctpath[i] = '\0';
+		ft_strcat(correctpath, "/");
+		ft_strcat(correctpath, command);
+		if (!access(correctpath, F_OK))
+			return (correctpath);
+		else if (*path)
+			path++;
 	}
 	return (NULL);
-}
-
-static char		**fill_argv(char *args)// -sdf -sdf toto wowo
-{
-	ft_printf("fill_argv:%s\n", args);
-	return ((char**)1);
-}
-
-static char		*fill_path(char *path, const char *command)// /bin/:toto/ro:as
-{
-	ft_printf("fill_path:%s--%s\n", path, command);
-	return ((char*)1);
 }
 
 int				mini_exec(char *command, char *args, t_env *env)
@@ -73,11 +114,11 @@ int				mini_exec(char *command, char *args, t_env *env)
 	argv = NULL;
 	if (!(path = mini_whereis_env("PATH=", env)))
 		return (shell_error(5, "PATH"));
-	if (!(path = fill_path(path, command)) || \
-		!(argv = fill_argv(args)))
+	if (args && *args && !(argv = fill_argv(args)))
 		errors(0, "malloc failed", &env);
-	exec_cmd(path, argv, env);
+	if (*command && (path = fill_path(path, command, env)))
+		exec_cmd(path, argv, env);
 	free(argv);
 	free(path);
-	return (1);
+	return (!!path);
 }
