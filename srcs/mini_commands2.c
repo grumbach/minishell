@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 06:12:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 19:06:29 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 22:06:12 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,32 @@ int				mini_pwd(char *args, t_env **env)
 	if (!(getcwd(buf, MAXPATHLEN)))
 		shell_error(2, "pwd");
 	ft_printf("%s\n", buf);
+	return (1);
+}
+
+int			mini_echo(char *args, t_env **env)
+{
+	char	*who;
+	char	*word;
+
+	while (args && *args)
+	{
+		word = args;
+		while (*args && *args != SEPARATOR_CHAR)
+			args++;
+		if (*args)
+		{
+			*args = '\0';
+			args++;
+		}
+		if ((who = mini_whereis_env(word, *env)))
+			ft_printf("%s", who + ft_strlen(word) + 1);
+		else if (word)
+			ft_printf("%s", word);
+		if (*args)
+			ft_printf(" ");
+	}
+	ft_printf("\n");
 	return (1);
 }
 

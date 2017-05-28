@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 19:16:51 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 21:41:14 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int		env_size(t_env *env)
 	return (i);
 }
 
-static void		exec_cmd(const char *path, char *const *args, t_env *env)
+static void		exec_cmd(const char *path, char **args, t_env *env)
 {
 	char	**envp;
 	t_env	*tail;
