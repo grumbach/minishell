@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 09:20:03 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 12:48:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,12 @@ static int	command_center(t_cmd *cmd, char *line, char **envp)
 
 static int	get_actions(char buf)
 {
-	ft_printf("{%c}", buf);
 	if (buf == '\t')
 		return (1);
+	if (buf == 127)
+		return (1);
+	else
+		write(0, &buf, 1);
 	return (0);
 }
 
@@ -76,7 +79,7 @@ void		mini_parse(t_array *line, t_cmd *cmd, char **envp)
 	while ((ret = read(0, &buf, 1)))
 		if (ret == -1)
 			errors(1, "failed to read");
-		else if (buf == '\n')
+		else if (buf == '\n' && write(0, &buf, 1))
 		{
 			if (!(line = ft_arrayadd(line, (char[1]){'\0'}, index, 1)))
 				errors(0, "malloc failed");

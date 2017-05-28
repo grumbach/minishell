@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 08:21:02 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 12:55:53 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,15 @@ static void	set_commands(t_cmd *cmd)
 
 int			main(int ac, char **av, char **envp)
 {
-	t_cmd	cmd[BUILT_IN_CMD_NB];
-	t_array	*line;
+	t_cmd			cmd[BUILT_IN_CMD_NB];
+	t_array			*line;
+	struct termios 	old;
+	struct termios	new;
 
+	tcgetattr(0, &old);
+	new = old;
+	new.c_lflag &= ~(ECHO | ECHOE | ICANON);
+	tcsetattr(0, 0, &new);
 	showoff();
 	(void)av;
 	(void)ac;
@@ -76,6 +82,7 @@ int			main(int ac, char **av, char **envp)
 	ft_bzero(&cmd, sizeof(cmd));
 	set_commands(cmd);
 	mini_parse(line, cmd, envp);
+	tcsetattr(0, 0, &old);
 	ft_arraydel(&line);
 	return (EXIT_SUCCESS);
 }
