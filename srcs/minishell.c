@@ -6,42 +6,16 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 12:55:53 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 14:12:00 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-long		errors(const int erno, const char *comment)
+static void	showoff(int ac, char **av)
 {
-	ft_putstr_fd("minishell: ", 2);
-	if (comment)
-		ft_putendl_fd(comment, 2);
-	if (erno == 0)
-		ft_putstr_fd("System Failure\n", 2);
-	if (erno == 1)
-		ft_putstr_fd("The Blood Moon is rising...\n", 2);
-	exit(EXIT_FAILURE);
-}
-
-long		shell_error(const int erno, const char *comment)
-{
-	ft_putstr_fd("minishell: ", 2);
-	if (comment)
-		ft_putstr_fd(comment, 2);
-	if (erno == 2)
-		ft_putstr_fd(" : failed to change dir\n", 2);
-	if (erno == 3)
-		ft_putstr_fd(" : command not found\n", 2);
-	if (erno == 4)
-		ft_putstr_fd("A computer is like air conditioning,\n"
-		"      It becomes useless when you open Windows.\n"
-		"                                 Linus Torvalds\n", 2);
-	return (0);
-}
-
-static void	showoff(void)
-{
+	(void)ac;
+	(void)av;
 	ft_printf("%s%s%s$> ", BLUE, "           _       _     _          _ _\n"
 	" _ __ ___ (_)_ __ (_)___| |__   ___| | |\n"
 	"| '_ ` _ \\| | '_ \\| / __| '_ \\ / _ \\ | |\n"
@@ -63,26 +37,48 @@ static void	set_commands(t_cmd *cmd)
 	cmd[5] = (t_cmd){"unsetenv", &mini_unsetenv};
 }
 
+void		mini_free_env(t_env **env, const char *who)
+{
+	t_env	*free_this;
+
+	while (*env)
+	{
+		if (!who || !ft_strncmp(who, (*env)->content, ft_strlen(who)))
+		{
+			free_this = *env;
+			*env = free_this->next;
+			free(free_this->content);
+			free(free_this);
+		}
+		else
+			env = &(*env)->next;
+	}
+}
+
 int			main(int ac, char **av, char **envp)
 {
 	t_cmd			cmd[BUILT_IN_CMD_NB];
 	t_array			*line;
-	struct termios 	old;
-	struct termios	new;
+	t_env			*env;
+	t_env			**tail;
 
-	tcgetattr(0, &old);
-	new = old;
-	new.c_lflag &= ~(ECHO | ECHOE | ICANON);
-	tcsetattr(0, 0, &new);
-	showoff();
-	(void)av;
-	(void)ac;
+	showoff(ac, av);
+	env = NULL;
+	tail = &env;
+	while (envp && *envp)
+	{
+		if (!(*tail = ft_memalloc(sizeof(t_env))) || \
+			(!((*tail)->content = ft_strdup(*envp))))
+			errors(0, "malloc failed", &env);
+		tail = &env->next;
+		envp++;
+	}
 	if (!(line = ft_arraynew(sizeof(char))))
-		errors(0, "malloc failed");
+		errors(0, "malloc failed", &env);
 	ft_bzero(&cmd, sizeof(cmd));
 	set_commands(cmd);
-	mini_parse(line, cmd, envp);
-	tcsetattr(0, 0, &old);
+	mini_parse(line, cmd, env);
 	ft_arraydel(&line);
+	mini_free_env(&env, NULL);
 	return (EXIT_SUCCESS);
 }

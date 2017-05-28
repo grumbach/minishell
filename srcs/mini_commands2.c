@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-int			mini_pwd(char *args, char **envp)
+int			mini_pwd(char *args, t_env *env)
 {
 	char	buf[MAXPATHLEN + 1];
 
 	(void)args;
-	(void)envp;
+	(void)env;
 	ft_bzero(&buf, sizeof(buf));
 	if (!(getcwd(buf, MAXPATHLEN)))
 		shell_error(1, "Permission Denied\n");

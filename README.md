@@ -36,5 +36,5 @@ wait()
 // cd [-(goback)] [dir]
 // setenv PATH="/bin:/usr/bin:/usr/sbin:usr/ucb/bin"
 // unsetenv PATH
-// envp
+// env
 // exit

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:38:11 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 12:28:08 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 16:14:43 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,21 @@
 # include "libft.h"
 # include "ft_printf.h"
 
-# include <termios.h>
-# include <sys/ioctl.h>
 # include <sys/param.h>
 
 # define MAX_CMD_LEN 15
 
-typedef struct	s_cmd
+typedef struct		s_env
 {
-	char		name[MAX_CMD_LEN + 1];
-	int			(*cmd)(char *args, char **envp);
-}				t_cmd;
+	char			*content;
+	struct s_env	*next;
+}					t_env;
+
+typedef struct		s_cmd
+{
+	char			name[MAX_CMD_LEN + 1];
+	int				(*cmd)(char *args, t_env *env);
+}					t_cmd;
 
 /*
 ** minishell
@@ -34,15 +38,16 @@ typedef struct	s_cmd
 
 # define SEPARATOR_CHAR ' '
 
-void		mini_parse(t_array *line, t_cmd *cmd, char **envp);
-int			mini_exec(char *command, char *args, char **envp);
-// char		*locate_in_env(const char *var, const char **envp);
+void		mini_parse(t_array *line, t_cmd *cmd, t_env *env);
+int			mini_exec(char *envvar, char *args, t_env *env);
+void		mini_free_env(t_env **env, const char *who);
+char		*mini_whereis_env(char *command, t_env *env);
 
 /*
 ** errors
 */
 
-long		errors(const int erno, const char *comment);
+long		errors(const int erno, const char *comment, t_env **env);
 long		shell_error(const int erno, const char *comment);
 
 /*
@@ -51,11 +56,11 @@ long		shell_error(const int erno, const char *comment);
 
 # define BUILT_IN_CMD_NB 6
 
-int			mini_cd(char *args, char **envp);
-int			mini_echo(char *args, char **envp);
-int			mini_env(char *args, char **envp);
-int			mini_pwd(char *args, char **envp);
-int			mini_setenv(char *args, char **envp);
-int			mini_unsetenv(char *args, char **envp);
+int			mini_cd(char *args, t_env *env);
+int			mini_echo(char *args, t_env *env);
+int			mini_env(char *args, t_env *env);
+int			mini_pwd(char *args, t_env *env);
+int			mini_setenv(char *args, t_env *env);
+int			mini_unsetenv(char *args, t_env *env);
 
 #endif

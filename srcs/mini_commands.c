@@ -6,16 +6,16 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:21:41 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 07:27:55 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 16:20:21 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			mini_cd(char *args, char **envp)
+int			mini_cd(char *args, t_env *env)
 {
 	ft_printf("called cd\n");
-	(void)envp;
+	(void)env;
 	if (!args)
 	{
 		chdir("~");
@@ -30,38 +30,38 @@ int			mini_cd(char *args, char **envp)
 	return (1);
 }
 
-int			mini_echo(char *args, char **envp)
+int			mini_echo(char *args, t_env *env)
 {
+	(void)env;
 	ft_printf("%s\n", args);
-	(void)envp;
 	return (1);
 }
 
-int			mini_env(char *args, char **envp)
+int			mini_env(char *args, t_env *env)
 {
 	(void)args;
-	if (!envp)
+	if (!env)
 		return (0);
-	while (*envp)
+	while (env)
 	{
-		ft_printf("%s\n", *envp);
-		envp++;
+		ft_printf("%s\n", env->content);
+		env = env->next;
 	}
 	return (1);
 }
 
-int			mini_setenv(char *args, char **envp)
+int			mini_setenv(char *args, t_env *env)
 {
 	ft_printf("called setenv\n");
 	(void)args;
-	(void)envp;
+	(void)env;
 	return (1);
 }
 
-int			mini_unsetenv(char *args, char **envp)
+int			mini_unsetenv(char *args, t_env *env)
 {
 	ft_printf("called unsetenv\n");
 	(void)args;
-	(void)envp;
+	(void)env;
 	return (1);
 }

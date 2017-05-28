@@ -6,13 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 12:48:30 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/28 16:19:26 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	exec_builtin(t_cmd *cmd, char *command, char *args, char **envp)
+static int	exec_builtin(t_cmd *cmd, char *command, char *args, t_env *env)
 {
 	int		i;
 	int		n;
@@ -30,11 +30,11 @@ static int	exec_builtin(t_cmd *cmd, char *command, char *args, char **envp)
 				i -= (i + 1) / 2;
 		}
 		else
-			return (cmd[i].cmd(args, envp));
+			return (cmd[i].cmd(args, env));
 	return (0);
 }
 
-static int	command_center(t_cmd *cmd, char *line, char **envp)
+static int	command_center(t_cmd *cmd, char *line, t_env *env)
 {
 	int		i;
 	char	*args;
@@ -52,8 +52,8 @@ static int	command_center(t_cmd *cmd, char *line, char **envp)
 		line[i] = '\0';
 		args = &line[i + 1];
 	}
-	if (!exec_builtin(cmd, line, args, envp))
-		if (!mini_exec(line, args, envp))
+	if (!exec_builtin(cmd, line, args, env))
+		if (!mini_exec(line, args, env))
 			shell_error(3, line);
 	return (1);
 }
@@ -62,14 +62,10 @@ static int	get_actions(char buf)
 {
 	if (buf == '\t')
 		return (1);
-	if (buf == 127)
-		return (1);
-	else
-		write(0, &buf, 1);
 	return (0);
 }
 
-void		mini_parse(t_array *line, t_cmd *cmd, char **envp)
+void		mini_parse(t_array *line, t_cmd *cmd, t_env *env)
 {
 	int		ret;
 	int		index;
@@ -78,12 +74,12 @@ void		mini_parse(t_array *line, t_cmd *cmd, char **envp)
 	index = 0;
 	while ((ret = read(0, &buf, 1)))
 		if (ret == -1)
-			errors(1, "failed to read");
-		else if (buf == '\n' && write(0, &buf, 1))
+			errors(1, "failed to read", &env);
+		else if (buf == '\n')
 		{
 			if (!(line = ft_arrayadd(line, (char[1]){'\0'}, index, 1)))
-				errors(0, "malloc failed");
-			if (!command_center(cmd, line->content, envp))
+				errors(0, "malloc failed", &env);
+			if (!command_center(cmd, line->content, env))
 				break ;
 			index = 0;
 			ft_printf("$> ");
@@ -95,5 +91,5 @@ void		mini_parse(t_array *line, t_cmd *cmd, char **envp)
 			(index && buf == SEPARATOR_CHAR && \
 			((char*)line->content)[index - 1] == SEPARATOR_CHAR))) && \
 			(!(line = ft_arrayadd(line, (char[1]){buf}, index++, 1))))
-				errors(0, "malloc failed");
+				errors(0, "malloc failed", &env);
 }

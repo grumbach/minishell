@@ -6,13 +6,14 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/28 12:42:53 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/05/28 13:46:00 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRC = minishell.c mini_exec.c mini_parse.c mini_commands.c mini_commands2.c
+SRC = minishell.c mini_exec.c mini_parse.c mini_commands.c mini_commands2.c \
+	mini_errors.c
 
 OBJDIR = objs
 
