@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 13:45:07 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 19:16:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/29 21:49:29 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ long		errors(const int erno, const char *comment, t_env **env)
 	if (erno == 1)
 		ft_putstr_fd("The Blood Moon is rising...\n", 2);
 	mini_free_env(env, NULL);
+	//system("reset");
 	exit(EXIT_FAILURE);
 }
 
@@ -41,6 +42,6 @@ long		shell_error(const int erno, const char *comment)
 	if (erno == 5)
 		ft_putstr_fd(" not set\n", 2);
 	if (erno == 6)
-		ft_putstr_fd(" : something else....\n", 2);
+		ft_putstr_fd("\n", 2);
 	return (0);
 }

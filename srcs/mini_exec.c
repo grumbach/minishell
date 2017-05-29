@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 21:41:14 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/29 22:09:36 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static char		**fill_argv(char *args)
 			*args++ = '\0';
 	}
 	return (argv);
-}
+}//TODO fix argv 1st arg  missing
 
 static char		*fill_path(char *path, const char *command, t_env *env)
 {

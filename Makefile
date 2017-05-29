@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/28 18:05:07 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/05/29 22:55:48 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,9 @@ test:
 	@${CC} -g -I./libft/includes/ -fsanitize=address -Llibft/ -lft \
 	-I. -o ${NAME} $(addprefix srcs/, ${SRC})
 
+debug: test
+	lldb ./${NAME}
+
 build: ${OBJ}
 
 re: fclean all
@@ -103,4 +106,4 @@ octopus:
 	@echo ${BB}"            (/\`    ( (\`          ) )  '-;                  "${BY}"|\`._\`n'_.'|"
 	@echo ${BB}"             \`      '-;         (-'                        "${BY}"\"----^----\""${X}
 
-.PHONY: all clean fclean re test octopus build
+.PHONY: all clean fclean re test octopus build debug

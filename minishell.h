@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:38:11 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/28 18:34:38 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/29 21:55:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "libft.h"
 # include "ft_printf.h"
 
+# include <termios.h>
+# include <sys/ioctl.h>
 # include <sys/param.h>
 
 # define MAX_CMD_LEN 15
