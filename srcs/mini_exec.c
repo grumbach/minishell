@@ -6,10 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/29 22:09:36 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/30 00:06:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "errno.h"//
 #include "minishell.h"
 
 static int		env_size(t_env *env)
@@ -46,15 +47,28 @@ static void		exec_cmd(const char *path, char **args, t_env *env)
 	if (!pid)
 	{
 		if (execve(path, args, envp) == -1)
+		{//
+			//
+			char **arg;
+			arg = args - 1;
+			ft_printf("[path=%s][args]", path);
+			while (*(++arg))
+			{
+				ft_printf("{%s}", *arg);
+			}
+			mini_env(0, &env);
+			//
+			ft_putendl_fd(strerror(errno), 2);//
 			errors(0, "execve error", &env);
+		}//
 		exit(EXIT_SUCCESS);
 	}
-	else if (wait(NULL) == -1)
+	else if (waitpid(pid, NULL, 0) == -1)
 		errors(0, "wait error", &env);
 	free(envp);
-}
+}//TODO exec a lot of same func will result in execve error
 
-static char		**fill_argv(char *args)
+static char		**fill_argv(char *command, char *args)
 {
 	char		**argv;
 	int			i;
@@ -63,14 +77,15 @@ static char		**fill_argv(char *args)
 	argv = NULL;
 	words = 0;
 	i = -1;
-	while (args[++i])
+	while (args && args[++i])
 		if ((i && args[i - 1] == SEPARATOR_CHAR) || \
 			(!i && args[i] != SEPARATOR_CHAR))
 			words++;
-	if (!(argv = ft_memalloc(sizeof(char*) * (words + 1))))
+	if (!(argv = ft_memalloc(sizeof(char*) * (words + 2))))
 		return (NULL);
-	i = 0;
-	while (*args && words--)
+	argv[0] = command;
+	i = 1;
+	while (args && *args && words--)
 	{
 		argv[i++] = args;
 		while (*args && *args != SEPARATOR_CHAR)
@@ -79,7 +94,7 @@ static char		**fill_argv(char *args)
 			*args++ = '\0';
 	}
 	return (argv);
-}//TODO fix argv 1st arg  missing
+}
 
 static char		*fill_path(char *path, const char *command, t_env *env)
 {
@@ -114,7 +129,7 @@ int				mini_exec(char *command, char *args, t_env *env)
 	argv = NULL;
 	if (!(path = mini_whereis_env("PATH", env)))
 		return (shell_error(5, "PATH"));
-	if (args && *args && !(argv = fill_argv(args)))
+	if (!(argv = fill_argv(command, args)))
 		errors(0, "malloc failed", &env);
 	if (*command && (path = fill_path(path, command, env)))
 		exec_cmd(path, argv, env);
