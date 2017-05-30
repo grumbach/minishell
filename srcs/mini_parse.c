@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/29 22:50:23 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/30 18:22:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,40 @@ static int	command_center(t_cmd *cmd, char *line, t_env **env)
 	return (1);
 }
 
-static int	get_termcaps(const int buf)
-{
-	//TODO
-	if (ft_isprint(buf))
-		write(0, &buf, 1);
-	else
-		ft_printf("[%d]\n", buf);
-	return (0);
-}
-
-static int	print_prompt(void)
+static int	print_prompt(const t_array *line, const int index)
 {
 	char	buf[MAXPATHLEN + 1];
 
 	if (!(getcwd(buf, MAXPATHLEN)))
 		shell_error(5, "current working directory");
 	ft_printf("%s[%s]%s$>%s ", BLUE, buf, GREEN, NORMAL);
+	if (line)
+		ft_printf("%.*s", index, line->content);//ret 0 if {\0}?? NB
 	return (0);
+}
+
+static int	puttc(const int tc)
+{
+	return (write(1, &tc, 1));
+}
+
+static int	get_termcaps(const int buf, t_array *line, int *index)
+{
+	if (ft_isprint(buf))
+		return (!write(1, &buf, 1));
+	if (buf == 12)
+	{
+		tputs(tgetstr("cl", 0), 1, &puttc);
+		print_prompt(line, *index);
+	}
+	if (*index && buf == 127)
+	{
+		tputs(tgetstr("le", 0), 1, &puttc);
+		tputs(tgetstr("dc", 0), 1, &puttc);
+		(*index)--;
+	}
+	// ft_printf("[%d]\n", buf);// NUMBER NOTE
+	return (1);
 }
 
 void		mini_parse(t_array *line, t_cmd *cmd, t_env **env)
@@ -91,21 +107,21 @@ void		mini_parse(t_array *line, t_cmd *cmd, t_env **env)
 	int		index;
 	int		buf;
 
-	buf = 0;
-	index = print_prompt();
-	while (buf != 4 && (ret = read(0, &buf, 4)))
+	index = print_prompt(line, 0);
+	while (buf != 4 && !(buf = 0) && \
+		(ret = read(0, &buf, 4)))
 		if (ret == -1)
 			errors(1, "failed to read", env);
-		else if ((char)buf == '\n' && write(0, &buf, 1))
+		else if ((char)buf == '\n' && write(1, &buf, 1))
 		{
 			if (!(line = ft_arrayadd(line, (char[1]){'\0'}, index, 1)))
 				errors(0, "malloc failed", env);
 			if (!command_center(cmd, line->content, env))
 				break ;
-			index = print_prompt();
+			index = print_prompt(NULL, 0);
 			continue ;
 		}
-		else if (get_termcaps(buf))
+		else if (get_termcaps(buf, line, &index))
 			continue ;
 		else if ((!((!index && (char)buf == SEPARATOR_CHAR) || \
 			(index && (char)buf == SEPARATOR_CHAR && \

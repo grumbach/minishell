@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/29 22:55:48 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/05/30 16:26:31 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJDIR = objs
 
 OBJ = $(addprefix ${OBJDIR}/, $(SRC:.c=.o))
 
-LIB = -Llibft -lft
+LIB = -Llibft -lft -ltermcap
 
 INCL = -Ilibft/includes
 
