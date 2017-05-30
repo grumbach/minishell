@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/30 17:11:49 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/05/30 22:24:10 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	termcaps(const int mode)
 	static struct termios	old;
 	struct termios			new;
 
-	tgetent(NULL, getenv("TERM"));//test env NULL NB
 	if (mode)
 	{
+		tgetent(NULL, getenv("TERM"));//test env NULL NB
 		tcgetattr(0, &old);
 		new = old;
 		new.c_lflag &= ~(ECHO | ECHOE | ICANON);

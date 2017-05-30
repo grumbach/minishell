@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/30 16:26:31 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/05/30 22:41:11 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 DEP = libft/includes/libft.h libft/includes/ft_printf.h minishell.h
 
-CC = /Users/agrumbac/.brew/bin/gcc-7
+CC = clang #/Users/agrumbac/.brew/bin/gcc-7
 
 OBJDIR = objs
 
@@ -75,7 +75,7 @@ fclean: clean
 	@/bin/rm -f ${NAME}
 
 test:
-	@${CC} -g -I./libft/includes/ -fsanitize=address -Llibft/ -lft \
+	@${CC} -g -I./libft/includes/ -fsanitize=address ${LIB} \
 	-I. -o ${NAME} $(addprefix srcs/, ${SRC})
 
 debug: test
