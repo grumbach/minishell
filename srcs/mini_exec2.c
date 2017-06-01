@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 05:41:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 05:46:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:15:37 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int			mini_command(t_cmd *cmd, char *line, t_env **env)
 		args = *args ? args : NULL;
 	}
 	if (!exec_builtin(cmd, line, args, env))
-		if (!mini_exec(line, args, *env))
-			shell_error(3, line);
+		mini_exec(line, args, *env);
 	return (1);
 }

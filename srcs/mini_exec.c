@@ -6,24 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 05:57:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:18:25 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int		env_size(t_env *env)
-{
-	int			i;
-
-	i = 0;
-	while (env)
-	{
-		env = env->next;
-		i++;
-	}
-	return (i);
-}
 
 static void		exec_cmd(const char *path, char **args, t_env *env)
 {
@@ -34,7 +21,7 @@ static void		exec_cmd(const char *path, char **args, t_env *env)
 
 	tail = env;
 	i = 0;
-	if (!(envp = (char **)ft_memalloc((env_size(env) + 1) * sizeof(char *))))
+	if (!(envp = (char **)ft_memalloc((mini_env_size(env) + 1) * sizeof(char *))))
 		errors(0, "malloc error", &env);
 	while (tail)
 	{
@@ -47,12 +34,12 @@ static void		exec_cmd(const char *path, char **args, t_env *env)
 	if (!pid)
 	{
 		if (execve(path, args, envp) == -1)
-			errors(0, "execve error", &env);
+			shell_error(3, path);
 	}
-	else if (waitpid(pid, NULL, 0) == -1)
-		errors(0, "wait error", &env);
+	else
+		waitpid(pid, NULL, 0);
 	free(envp);
-}//TODO exec ./minishell access _X
+}
 
 static char		**fill_argv(char *command, char *args)
 {
@@ -87,6 +74,8 @@ static char		*fill_path(char *path, const char *command, t_env *env)
 	char		*correctpath;
 	int			i;
 
+	if (!path)
+		return (NULL);
 	if (!(correctpath = ft_strnew(ft_strlen(path) + ft_strlen(command) + 2)))
 		errors(0, "malloc failed", &env);
 	path += ft_strlen("PATH=");
@@ -98,7 +87,7 @@ static char		*fill_path(char *path, const char *command, t_env *env)
 		correctpath[i] = '\0';
 		ft_strcat(correctpath, "/");
 		ft_strcat(correctpath, command);
-		if (!access(correctpath, F_OK | X_OK))
+		if (!access(correctpath, F_OK) && !access(correctpath, X_OK))
 			return (correctpath);
 		else if (*path)
 			path++;
@@ -107,7 +96,32 @@ static char		*fill_path(char *path, const char *command, t_env *env)
 	return (NULL);
 }
 
-int				mini_exec(char *command, char *args, t_env *env)
+int				exec_or_error(char *command, char **argv, t_env *env)
+{
+	struct stat			stats;
+	char				*lastslash;
+
+	if ((lastslash = ft_strrchr(command, '/')) && *(lastslash + 1))
+	{
+		if (!access(command, F_OK))
+		{
+			if (!access(command, X_OK) && \
+			lstat(command, &stats) != -1 && !(S_ISDIR(stats.st_mode)))
+			{
+				exec_cmd(command, argv, env);
+				return (1);
+			}
+			else
+				return (shell_error(2, command));
+		}
+		else
+			return (shell_error(6, command));
+	}
+	else
+		return (shell_error(3, command));
+}
+
+void			mini_exec(char *command, char *args, t_env *env)
 {
 	char	*path;
 	char	**argv;
@@ -115,12 +129,16 @@ int				mini_exec(char *command, char *args, t_env *env)
 	path = NULL;
 	argv = NULL;
 	if (!(path = mini_whereis_env("PATH", env)))
-		return (shell_error(5, "PATH"));
+		shell_error(5, "PATH");
 	if (!(argv = fill_argv(command, args)))
 		errors(0, "malloc failed", &env);
-	if (*command && (path = fill_path(path, command, env)))
-		exec_cmd(path, argv, env);
+	if (*command)
+	{
+		if ((path = fill_path(path, command, env)))
+			exec_cmd(path, argv, env);
+		else
+			exec_or_error(command, argv, env);
+	}
 	free(argv);
 	free(path);
-	return (!!path);
 }

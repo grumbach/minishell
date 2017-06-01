@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 13:45:07 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/29 21:49:29 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:13:44 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ long		shell_error(const int erno, const char *comment)
 	if (erno == 5)
 		ft_putstr_fd(" not set\n", 2);
 	if (erno == 6)
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(" : No such file or directory\n", 2);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 19:11:51 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 05:27:00 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:15:44 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,17 @@ char		*mini_whereis_env(char *envvar, t_env *env)
 		env = env->next;
 	}
 	return (NULL);
+}
+
+int			mini_env_size(t_env *env)
+{
+	int			i;
+
+	i = 0;
+	while (env)
+	{
+		env = env->next;
+		i++;
+	}
+	return (i);
 }
