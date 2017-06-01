@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 15:18:25 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:32:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		exec_cmd(const char *path, char **args, t_env *env)
 
 	tail = env;
 	i = 0;
-	if (!(envp = (char **)ft_memalloc((mini_env_size(env) + 1) * sizeof(char *))))
+	if (!(envp = ft_memalloc((mini_env_size(env) + 1) * sizeof(char *))))
 		errors(0, "malloc error", &env);
 	while (tail)
 	{

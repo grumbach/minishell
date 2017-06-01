@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 06:12:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/31 19:16:58 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:38:25 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int				mini_pwd(char *args, t_env **env)
 	return (1);
 }
 
-int			mini_echo(char *args, t_env **env)
+int				mini_echo(char *args, t_env **env)
 {
 	char	*who;
 	char	*word;

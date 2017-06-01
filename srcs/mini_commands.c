@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:21:41 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 05:06:21 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:38:44 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int			mini_env(char *args, t_env **env)
 	while (see)
 	{
 		ft_printf("%s\n", see->content);
-	 	see = see->next;
+		see = see->next;
 	}
 	return (1);
 }

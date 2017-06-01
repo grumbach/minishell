@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:17:16 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 05:42:19 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:39:36 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	print_prompt(const t_array *line, const int index)
 		shell_error(5, "current working directory");
 	ft_printf("%s[%s]%s$>%s ", BLUE, buf, GREEN, NORMAL);
 	if (line)
-		ft_printf("%.*s", index, line->content);//ret 0 if {\0}?? NB?
+		ft_printf("%.*s", index, line->content);
 	return (0);
 }
 
@@ -44,17 +44,15 @@ static int	get_termcaps(const int buf, t_array *line, int *index)
 		tputs(tgetstr("dc", 0), 1, &puttc);
 		(*index)--;
 	}
-	// ft_printf("[%d]\n", buf);// NUMBER NOTE
 	return (1);
 }
 
-void		mini_parse(t_array *line, t_cmd *cmd, t_env **env)
+void		mini_parse(t_array *line, t_cmd *cmd, t_env **env, int buf)
 {
 	int		ret;
 	int		index;
-	int		buf;
 
-	index = print_prompt(line, (buf = 0));
+	index = print_prompt(line, 0);
 	while (buf != 4 && !(buf = 0) && \
 		(ret = read(0, &buf, 4)))
 		if (ret == -1)
@@ -74,5 +72,5 @@ void		mini_parse(t_array *line, t_cmd *cmd, t_env **env)
 			(index && (char)buf == SEPARATOR_CHAR && \
 			((char*)line->content)[index - 1] == SEPARATOR_CHAR))) && \
 			(!(line = ft_arrayadd(line, (char[1]){(char)buf}, index++, 1))))
-				errors(0, "malloc failed", env);
+			errors(0, "malloc failed", env);
 }

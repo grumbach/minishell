@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 15:13:54 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:43:00 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	termcaps(const int mode)
 
 	if (mode)
 	{
-		tgetent(NULL, getenv("TERM"));//test env NULL NB
+		tgetent(NULL, HOST_ENV_TERM);
 		tcgetattr(0, &old);
 		new = old;
 		new.c_lflag &= ~(ECHO | ECHOE | ICANON);
@@ -77,7 +77,7 @@ int			main(int ac, char **av, char **envp)
 		errors(0, "malloc failed", &env);
 	ft_bzero(&cmd, sizeof(cmd));
 	set_commands(cmd);
-	mini_parse(line, cmd, &env);
+	mini_parse(line, cmd, &env, 0);
 	ft_arraydel(&line);
 	mini_free_env(&env, NULL);
 	termcaps(0);

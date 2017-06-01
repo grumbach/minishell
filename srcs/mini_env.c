@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 19:11:51 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/06/01 15:15:44 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 15:38:10 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		mini_free_env(t_env **env, const char *who)
 
 int			mini_set_env(char *var, char *content, t_env **env)
 {
-	char 	*who;
+	char	*who;
 	t_env	*new;
 
 	if ((who = mini_whereis_env(var, *env)))
