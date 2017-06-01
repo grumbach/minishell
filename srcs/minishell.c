@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:32:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/30 22:24:10 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 04:56:16 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,6 @@ static void	set_commands(t_cmd *cmd)
 	cmd[3] = (t_cmd){"pwd", &mini_pwd};
 	cmd[4] = (t_cmd){"setenv", &mini_setenv};
 	cmd[5] = (t_cmd){"unsetenv", &mini_unsetenv};
-}
-
-void		mini_free_env(t_env **env, const char *who)
-{
-	t_env	*free_this;
-
-	while (*env)
-	{
-		if (!who || !ft_strncmp(who, (*env)->content, ft_strlen(who)))
-		{
-			free_this = *env;
-			*env = free_this->next;
-			free(free_this->content);
-			free(free_this);
-		}
-		else
-			env = &(*env)->next;
-	}
 }
 
 int			main(int ac, char **av, char **envp)

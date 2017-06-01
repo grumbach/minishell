@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 14:38:11 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/30 18:14:58 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 05:46:49 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <term.h>
 
 # define MAX_CMD_LEN 15
+# define SEPARATOR_CHAR ' '
 
 typedef struct		s_env
 {
@@ -39,11 +40,16 @@ typedef struct		s_cmd
 ** minishell
 */
 
-# define SEPARATOR_CHAR ' '
-
 void		mini_parse(t_array *line, t_cmd *cmd, t_env **env);
+int			mini_command(t_cmd *cmd, char *line, t_env **env);
 int			mini_exec(char *envvar, char *args, t_env *env);
+
+/*
+** env
+*/
+
 void		mini_free_env(t_env **env, const char *who);
+int			mini_set_env(char *var, char *content, t_env **env);
 char		*mini_whereis_env(char *command, t_env *env);
 
 /*

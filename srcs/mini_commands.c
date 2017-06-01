@@ -6,27 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:21:41 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/29 22:54:54 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 05:06:21 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	set_env(char *var, char *content, t_env **env)
-{
-	char 	*who;
-	t_env	*new;
-
-	if ((who = mini_whereis_env(var, *env)))
-		mini_free_env(env, who);
-	if (!(new = ft_memalloc(sizeof(t_env))) ||
-		!(new->content = ft_strnjoin(3, var, "=", content)))
-		return (errors(0, "malloc failed", env));
-	while (*env)
-		env = &(*env)->next;
-	*env = new;
-	return (1);
-}
 
 int			mini_setenv(char *args, t_env **env)
 {
@@ -41,7 +25,7 @@ int			mini_setenv(char *args, t_env **env)
 	if (*args != '=' || args == var)
 		return (shell_error(1, "setenv : bad synthax\n"));
 	*args++ = '\0';
-	set_env(var, args, env);
+	mini_set_env(var, args, env);
 	mini_env(0, env);
 	return (1);
 }
@@ -98,8 +82,8 @@ int			mini_cd(char *args, t_env **env)
 		return (shell_error(5, "current working directory"));
 	if (chdir(who) == -1)
 		return (shell_error(2, "cd"));
-	set_env("OLDPWD", path, env);
+	mini_set_env("OLDPWD", path, env);
 	if (!(getcwd(path, MAXPATHLEN)))
 		return (shell_error(5, "current working directory"));
-	return (set_env("PWD", path, env));
+	return (mini_set_env("PWD", path, env));
 }

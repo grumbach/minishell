@@ -6,11 +6,10 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/28 00:16:00 by agrumbac          #+#    #+#             */
-/*   Updated: 2017/05/30 00:06:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2017/06/01 05:57:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "errno.h"//
 #include "minishell.h"
 
 static int		env_size(t_env *env)
@@ -35,38 +34,25 @@ static void		exec_cmd(const char *path, char **args, t_env *env)
 
 	tail = env;
 	i = 0;
-	if (!(envp = ft_memalloc(env_size(env) * sizeof(char*))))
+	if (!(envp = (char **)ft_memalloc((env_size(env) + 1) * sizeof(char *))))
 		errors(0, "malloc error", &env);
 	while (tail)
 	{
 		envp[i++] = tail->content;
 		tail = tail->next;
 	}
+	envp[i] = NULL;
 	if ((pid = fork()) == -1)
 		errors(0, "fork error", &env);
 	if (!pid)
 	{
 		if (execve(path, args, envp) == -1)
-		{//
-			//
-			char **arg;
-			arg = args - 1;
-			ft_printf("[path=%s][args]", path);
-			while (*(++arg))
-			{
-				ft_printf("{%s}", *arg);
-			}
-			mini_env(0, &env);
-			//
-			ft_putendl_fd(strerror(errno), 2);//
 			errors(0, "execve error", &env);
-		}//
-		exit(EXIT_SUCCESS);
 	}
 	else if (waitpid(pid, NULL, 0) == -1)
 		errors(0, "wait error", &env);
 	free(envp);
-}//TODO exec a lot of same func will result in execve error
+}//TODO exec ./minishell access _X
 
 static char		**fill_argv(char *command, char *args)
 {
@@ -112,11 +98,12 @@ static char		*fill_path(char *path, const char *command, t_env *env)
 		correctpath[i] = '\0';
 		ft_strcat(correctpath, "/");
 		ft_strcat(correctpath, command);
-		if (!access(correctpath, F_OK))
+		if (!access(correctpath, F_OK | X_OK))
 			return (correctpath);
 		else if (*path)
 			path++;
 	}
+	free(correctpath);
 	return (NULL);
 }
 

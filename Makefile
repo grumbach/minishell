@@ -6,22 +6,22 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/25 11:36:26 by agrumbac          #+#    #+#              #
-#    Updated: 2017/05/30 22:41:11 by agrumbac         ###   ########.fr        #
+#    Updated: 2017/06/01 05:47:11 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRC = minishell.c mini_exec.c mini_parse.c mini_commands.c mini_commands2.c \
-	mini_errors.c
+	mini_errors.c mini_env.c mini_exec2.c
 
 OBJDIR = objs
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 DEP = libft/includes/libft.h libft/includes/ft_printf.h minishell.h
 
-CC = clang #/Users/agrumbac/.brew/bin/gcc-7
+CC = /Users/agrumbac/.brew/bin/gcc-7
 
 OBJDIR = objs
 
