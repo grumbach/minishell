@@ -6,6 +6,8 @@
 
 Let us therefore write a <b>UNIX</b>-like shell : <b>minishell</b>
 
+<img align="center" src="https://github.com/grumbach/minishell/blob/master/resources/minishell.gif" width ="100%"/>
+
 ### built-ins:
 - echo
 - cd
@@ -14,3 +16,7 @@ Let us therefore write a <b>UNIX</b>-like shell : <b>minishell</b>
 - unsetenv
 - env
 - exit
+
+### Installation
+
+$> git clone https://github.com/grumbach/minishell.git && cd minishell && git clone https://github.com/grumbach/libft.git && make && ./minishell
